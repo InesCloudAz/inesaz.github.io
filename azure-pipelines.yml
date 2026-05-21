@@ -9,8 +9,8 @@ pool:
 
 variables:
   buildConfiguration: Release
-  azureSubscription: 'TODO-Azure-Service-Connection'
-  webAppName: 'TODO-Azure-App-Service-Name'
+  azureSubscription: 'AzureTodoServiceConnection'
+  webAppName: 'azure-todo-examensprojekt'
   solution: 'AzureTodoExamensprojekt.sln'
   webProject: 'Todo.Web/Todo.Web.csproj'
 
