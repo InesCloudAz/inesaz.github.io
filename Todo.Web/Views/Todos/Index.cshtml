@@ -1,0 +1,144 @@
+@model TodoDashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    var filters = new[]
+    {
+        new { Label = "Alla", Value = TodoStatusFilter.All, Icon = "bi-collection" },
+        new { Label = "Aktiva", Value = TodoStatusFilter.Active, Icon = "bi-lightning-charge" },
+        new { Label = "Klara", Value = TodoStatusFilter.Completed, Icon = "bi-check2-square" }
+    };
+}
+
+<section class="dashboard-hero">
+    <div>
+        <p class="eyebrow">Azure cloud productivity</p>
+        <h1>Todo dashboard</h1>
+        <p class="hero-copy">Planera, filtrera och följ upp dina uppgifter i ett säkert MVC-system byggt för Azure.</p>
+    </div>
+    <div class="hero-status">
+        <span><i class="bi bi-cloud-check"></i> App Service ready</span>
+        <span><i class="bi bi-database-check"></i> Azure SQL</span>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+    <aside class="command-panel">
+        <div class="panel-heading">
+            <span class="panel-icon"><i class="bi bi-plus-lg"></i></span>
+            <div>
+                <h2>Ny todo</h2>
+                <p>Skapa en fokuserad uppgift med titel, beskrivning och deadline.</p>
+            </div>
+        </div>
+
+        <form asp-action="Create" method="post" class="todo-form">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label asp-for="NewTodo.Title" class="form-label">Titel</label>
+            <input asp-for="NewTodo.Title" name="Title" class="form-control form-control-lg" placeholder="Ex. Skriv deployment-dokumentation" />
+            <span asp-validation-for="NewTodo.Title" class="text-danger"></span>
+
+            <label asp-for="NewTodo.Description" class="form-label">Beskrivning</label>
+            <textarea asp-for="NewTodo.Description" name="Description" class="form-control" rows="4" placeholder="Kort sammanhang, acceptanskriterier eller anteckningar"></textarea>
+
+            <label asp-for="NewTodo.DueDateUtc" class="form-label">Deadline</label>
+            <input asp-for="NewTodo.DueDateUtc" name="DueDateUtc" type="datetime-local" class="form-control" />
+
+            <button class="btn btn-primary btn-lg w-100" type="submit">
+                <i class="bi bi-stars"></i> Lägg till uppgift
+            </button>
+        </form>
+    </aside>
+
+    <div class="work-panel">
+        <div class="stats-row">
+            <article class="stat-card">
+                <span>Total</span>
+                <strong>@Model.Stats.Total</strong>
+            </article>
+            <article class="stat-card accent">
+                <span>Klara</span>
+                <strong>@Model.Stats.Completed</strong>
+            </article>
+            <article class="stat-card warm">
+                <span>Aktiva</span>
+                <strong>@Model.Stats.Active</strong>
+            </article>
+        </div>
+
+        <div class="list-toolbar">
+            <div>
+                <h2>Mina uppgifter</h2>
+                <p>Endast dina egna todos visas här.</p>
+            </div>
+            <div class="filter-tabs" role="tablist" aria-label="Todo-filter">
+                @foreach (var filter in filters)
+                {
+                    var active = Model.CurrentFilter == filter.Value ? "active" : "";
+                    <a class="filter-tab @active" asp-action="Index" asp-route-filter="@filter.Value">
+                        <i class="bi @filter.Icon"></i> @filter.Label
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="todo-list">
+            @if (!Model.Todos.Any())
+            {
+                <div class="empty-state">
+                    <i class="bi bi-inboxes"></i>
+                    <h3>Inga uppgifter ännu</h3>
+                    <p>Skapa din första todo i panelen till vänster.</p>
+                </div>
+            }
+            else
+            {
+                @foreach (var todo in Model.Todos)
+                {
+                    <article class="todo-card @(todo.IsCompleted ? "completed" : "")">
+                        <div class="todo-check">
+                            @if (todo.IsCompleted)
+                            {
+                                <i class="bi bi-check-circle-fill"></i>
+                            }
+                            else
+                            {
+                                <form asp-action="Complete" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@todo.Id" />
+                                    <button type="submit" class="icon-button" title="Markera som klar"><i class="bi bi-circle"></i></button>
+                                </form>
+                            }
+                        </div>
+                        <div class="todo-content">
+                            <h3>@todo.Title</h3>
+                            @if (!string.IsNullOrWhiteSpace(todo.Description))
+                            {
+                                <p>@todo.Description</p>
+                            }
+                            <div class="todo-meta">
+                                <span><i class="bi bi-calendar2-week"></i> Skapad @todo.CreatedAtUtc.ToLocalTime().ToString("yyyy-MM-dd")</span>
+                                @if (todo.DueDateUtc is not null)
+                                {
+                                    <span><i class="bi bi-clock"></i> Deadline @todo.DueDateUtc.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="todo-actions">
+                            <a class="icon-button" asp-action="Edit" asp-route-id="@todo.Id" title="Redigera"><i class="bi bi-pencil"></i></a>
+                            <form asp-action="Delete" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@todo.Id" />
+                                <button type="submit" class="icon-button danger" title="Ta bort"><i class="bi bi-trash3"></i></button>
+                            </form>
+                        </div>
+                    </article>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
