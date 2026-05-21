@@ -17,14 +17,19 @@ public class TodosController : Controller
         _todoService = todoService;
     }
 
-    public async Task<IActionResult> Index(TodoStatusFilter filter = TodoStatusFilter.All, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> Index(TodoStatusFilter filter = TodoStatusFilter.All, string? searchTerm = null, CancellationToken cancellationToken = default)
     {
         var userId = GetUserId();
+        var todos = string.IsNullOrWhiteSpace(searchTerm)
+            ? await _todoService.GetTodosAsync(userId, filter, cancellationToken)
+            : await _todoService.SearchTodosAsync(userId, searchTerm, cancellationToken);
+
         var model = new TodoDashboardViewModel
         {
-            Todos = await _todoService.GetTodosAsync(userId, filter, cancellationToken),
+            Todos = todos,
             Stats = await _todoService.GetStatsAsync(userId, cancellationToken),
-            CurrentFilter = filter
+            CurrentFilter = filter,
+            SearchTerm = searchTerm
         };
 
         return View(model);
@@ -36,7 +41,7 @@ public class TodosController : Controller
     {
         if (!ModelState.IsValid)
         {
-            return await Index(TodoStatusFilter.All, cancellationToken);
+            return await Index(TodoStatusFilter.All, null, cancellationToken);
         }
 
         await _todoService.CreateTodoAsync(newTodo, GetUserId(), cancellationToken);

@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Todo.Application.Abstractions;
 using Todo.Application.DTOs;
+using Todo.Application.Search;
 using Todo.Application.Services;
 using Todo.Domain.Entities;
 
@@ -78,10 +79,25 @@ public class TodoServiceTests
         Assert.Empty(await service.GetTodosAsync("user-2"));
     }
 
+    [Fact]
+    public async Task SearchTodosAsync_UsesDatabaseFallbackWhenAzureSearchIsNotConfigured()
+    {
+        var repository = new InMemoryTodoRepository();
+        var service = CreateService(repository);
+        await service.CreateTodoAsync(new CreateTodoRequest { Title = "Azure Search setup", Description = "Create index in portal" }, "user-1");
+        await service.CreateTodoAsync(new CreateTodoRequest { Title = "Write README", Description = "Deployment notes" }, "user-1");
+        await service.CreateTodoAsync(new CreateTodoRequest { Title = "Azure Search setup", Description = "Other user task" }, "user-2");
+
+        var results = await service.SearchTodosAsync("user-1", "Search");
+
+        Assert.Single(results);
+        Assert.Equal("Azure Search setup", results[0].Title);
+    }
+
     private static TodoService CreateService(ITodoRepository repository)
     {
         var logger = new Mock<ILogger<TodoService>>();
-        return new TodoService(repository, logger.Object);
+        return new TodoService(repository, new DisabledSearchService(), new DisabledSearchService(), logger.Object);
     }
 
     private sealed class InMemoryTodoRepository : ITodoRepository
@@ -101,6 +117,18 @@ public class TodoServiceTests
             return Task.FromResult<IReadOnlyList<TodoItem>>(query.ToList());
         }
 
+        public Task<IReadOnlyList<TodoItem>> SearchForUserAsync(string userId, string searchTerm, CancellationToken cancellationToken = default)
+        {
+            var normalizedTerm = searchTerm.Trim();
+            var query = _todos
+                .Where(todo => todo.UserId == userId)
+                .Where(todo =>
+                    todo.Title.Contains(normalizedTerm, StringComparison.OrdinalIgnoreCase) ||
+                    (todo.Description?.Contains(normalizedTerm, StringComparison.OrdinalIgnoreCase) ?? false));
+
+            return Task.FromResult<IReadOnlyList<TodoItem>>(query.ToList());
+        }
+
         public Task<TodoItem?> GetByIdForUserAsync(Guid id, string userId, CancellationToken cancellationToken = default) =>
             Task.FromResult(_todos.FirstOrDefault(todo => todo.Id == id && todo.UserId == userId));
 
@@ -113,5 +141,17 @@ public class TodoServiceTests
         public void Remove(TodoItem todo) => _todos.Remove(todo);
 
         public Task SaveChangesAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+    }
+
+    private sealed class DisabledSearchService : IAzureAiSearchTodoIndexer, IAzureAiSearchTodoSearchService
+    {
+        public bool IsConfigured => false;
+
+        public Task IndexTodoAsync(TodoSearchDocument todo, CancellationToken cancellationToken = default) => Task.CompletedTask;
+
+        public Task RemoveTodoAsync(Guid todoId, string userId, CancellationToken cancellationToken = default) => Task.CompletedTask;
+
+        public Task<IReadOnlyList<TodoSearchDocument>> SearchTodosAsync(string searchTerm, string userId, CancellationToken cancellationToken = default) =>
+            Task.FromResult<IReadOnlyList<TodoSearchDocument>>([]);
     }
 }

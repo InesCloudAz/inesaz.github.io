@@ -82,13 +82,25 @@
             </div>
         </div>
 
+        <form asp-action="Index" method="get" class="search-bar">
+            <input type="hidden" name="filter" value="@Model.CurrentFilter" />
+            <label class="visually-hidden" for="searchTerm">Sök todos</label>
+            <i class="bi bi-search"></i>
+            <input id="searchTerm" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Sök på titel eller beskrivning" />
+            <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Sök</button>
+            @if (!string.IsNullOrWhiteSpace(Model.SearchTerm))
+            {
+                <a class="btn btn-outline-light" asp-action="Index" asp-route-filter="@Model.CurrentFilter">Rensa</a>
+            }
+        </form>
+
         <div class="todo-list">
             @if (!Model.Todos.Any())
             {
                 <div class="empty-state">
                     <i class="bi bi-inboxes"></i>
-                    <h3>Inga uppgifter ännu</h3>
-                    <p>Skapa din första todo i panelen till vänster.</p>
+                    <h3>Inga uppgifter hittades</h3>
+                    <p>Skapa en ny todo eller justera sökningen.</p>
                 </div>
             }
             else

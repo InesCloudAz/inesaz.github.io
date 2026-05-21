@@ -7,6 +7,7 @@ public class TodoItem
     public string? Description { get; private set; }
     public bool IsCompleted { get; private set; }
     public DateTime CreatedAtUtc { get; private set; } = DateTime.UtcNow;
+    public DateTime UpdatedAtUtc { get; private set; } = DateTime.UtcNow;
     public DateTime? DueDateUtc { get; private set; }
     public DateTime? CompletedAtUtc { get; private set; }
     public string UserId { get; private set; } = string.Empty;
@@ -28,18 +29,21 @@ public class TodoItem
         Rename(title);
         Description = description;
         DueDateUtc = dueDateUtc;
+        UpdatedAtUtc = DateTime.UtcNow;
     }
 
     public void MarkCompleted()
     {
         IsCompleted = true;
         CompletedAtUtc ??= DateTime.UtcNow;
+        UpdatedAtUtc = DateTime.UtcNow;
     }
 
     public void MarkActive()
     {
         IsCompleted = false;
         CompletedAtUtc = null;
+        UpdatedAtUtc = DateTime.UtcNow;
     }
 
     private void Rename(string title)

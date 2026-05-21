@@ -6,6 +6,7 @@ using Todo.Application.Abstractions;
 using Todo.Infrastructure.Identity;
 using Todo.Infrastructure.Persistence;
 using Todo.Infrastructure.Repositories;
+using Todo.Infrastructure.Search;
 
 namespace Todo.Infrastructure;
 
@@ -31,6 +32,10 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.AddScoped<ITodoRepository, TodoRepository>();
+        services.Configure<AzureSearchOptions>(configuration.GetSection("AzureSearch"));
+        services.AddSingleton<AzureAiSearchTodoService>();
+        services.AddSingleton<IAzureAiSearchTodoIndexer>(provider => provider.GetRequiredService<AzureAiSearchTodoService>());
+        services.AddSingleton<IAzureAiSearchTodoSearchService>(provider => provider.GetRequiredService<AzureAiSearchTodoService>());
 
         return services;
     }

@@ -1,9 +1,10 @@
-using Todo.Application.DTOs;
+using Todo.Application.Search;
 
 namespace Todo.Application.Abstractions;
 
 public interface IAzureAiSearchTodoIndexer
 {
-    Task IndexTodoAsync(TodoDto todo, CancellationToken cancellationToken = default);
+    bool IsConfigured { get; }
+    Task IndexTodoAsync(TodoSearchDocument todo, CancellationToken cancellationToken = default);
     Task RemoveTodoAsync(Guid todoId, string userId, CancellationToken cancellationToken = default);
 }

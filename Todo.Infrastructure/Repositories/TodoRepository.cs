@@ -33,6 +33,20 @@ public sealed class TodoRepository : ITodoRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IReadOnlyList<TodoItem>> SearchForUserAsync(string userId, string searchTerm, CancellationToken cancellationToken = default)
+    {
+        var normalizedTerm = searchTerm.Trim();
+
+        return await _dbContext.Todos
+            .Where(todo => todo.UserId == userId)
+            .Where(todo =>
+                todo.Title.Contains(normalizedTerm) ||
+                (todo.Description != null && todo.Description.Contains(normalizedTerm)))
+            .OrderBy(todo => todo.IsCompleted)
+            .ThenByDescending(todo => todo.UpdatedAtUtc)
+            .ToListAsync(cancellationToken);
+    }
+
     public Task<TodoItem?> GetByIdForUserAsync(Guid id, string userId, CancellationToken cancellationToken = default) =>
         _dbContext.Todos.FirstOrDefaultAsync(todo => todo.Id == id && todo.UserId == userId, cancellationToken);
 

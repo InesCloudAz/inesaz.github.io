@@ -6,5 +6,6 @@ public sealed record TodoDto(
     string? Description,
     bool IsCompleted,
     DateTime CreatedAtUtc,
+    DateTime UpdatedAtUtc,
     DateTime? DueDateUtc,
     DateTime? CompletedAtUtc);

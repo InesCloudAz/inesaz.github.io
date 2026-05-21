@@ -19,9 +19,15 @@ public class TodosController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<TodoDto>>> GetTodos([FromQuery] TodoStatusFilter status = TodoStatusFilter.All, CancellationToken cancellationToken = default)
+    public async Task<ActionResult<IReadOnlyList<TodoDto>>> GetTodos(
+        [FromQuery] TodoStatusFilter status = TodoStatusFilter.All,
+        [FromQuery] string? searchTerm = null,
+        CancellationToken cancellationToken = default)
     {
-        var todos = await _todoService.GetTodosAsync(GetUserId(), status, cancellationToken);
+        var todos = string.IsNullOrWhiteSpace(searchTerm)
+            ? await _todoService.GetTodosAsync(GetUserId(), status, cancellationToken)
+            : await _todoService.SearchTodosAsync(GetUserId(), searchTerm, cancellationToken);
+
         return Ok(todos);
     }
 
