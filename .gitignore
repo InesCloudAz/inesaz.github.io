@@ -85,12 +85,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Legacy static portfolio files kept locally outside the .NET exam project
-.github/
-Styles/
-images/
-cv.html
-index.html
-kontakt.html
-personligt-brev.html
-package-lock.json
+

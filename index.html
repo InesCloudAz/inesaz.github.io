@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Ines Azouz - Cloud &amp; Backend Developer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./Styles/Styles/styles.css" rel="stylesheet">
+</head>
+<body>
+
+    <header class="hero">
+        <img src="images/BildCV.jpg" alt="Ines Azouz" class="rectangular-img">
+        <p class="hero-name">Ines Azouz</p>
+        <h1>Cloud Developer</h1>
+        <h2>Fokus på molntjänster, integrationer, systemförståelse och moderna lösningar i Azure.</h2>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <!-- <a class="navbar-brand" href="index.html">Ines Azouz</a> -->
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Profil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cv.html">CV</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="personligt-brev.html">Personligt brev</a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="kontakt.html">Kontakt</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5 portfolio-page">
+        <section class="section-block">
+            <h2>Om mig</h2>
+            <p>
+               Jag är Azure Cloud utvecklare med fokus på molntjänster, systemutveckling, integrationer och AI-lösningar i Microsoft Azure. Jag drivs av att förstå 
+               hur teknik kan användas för att skapa smartare, säkrare, robusta och mer effektiva lösningar, från automatisering och integrationer till moderna moln, och 
+               AI tjänster.
+            </p>
+            <p>
+                Med en bakgrund inom ekonomi och finans kombinerar jag teknisk implementation med stark verksamhetsförståelse. Jag har ett analytiskt arbetssätt och 
+                motiveras av att förstå behov, lösa problem och omsätta tekniska möjligheter till lösningar som skapar verkligt värde för användare och verksamhet.
+            </p>
+        </section>
+
+        <section class="section-block">
+            <h2>Teknisk kompetens</h2>
+            <div class="tech-groups" aria-label="Teknisk kompetens">
+                <div class="tech-group">
+                    <h3>Moln &amp; Data</h3>
+                    <div class="tech-list">
+                        <span>Azure</span>
+                        <span>Azure Data Factory</span>
+                        <span>Azure SQL</span>
+                        <span>Azure Storage</span>
+                        <span>Power BI</span>
+                        <span>Azure Functions</span>
+                    </div>
+                </div>
+
+                <div class="tech-group">
+                    <h3>AI &amp; Sök</h3>
+                    <div class="tech-list">
+                        <span>Azure AI Search</span>
+                        <span>Azure OpenAI</span>
+                        <span>Azure AI Foundry</span>
+                        <span>RAG</span>
+                        <span>AI Agents</span>
+                        <span>Vector Search</span>
+                    </div>
+                </div>
+
+                <div class="tech-group">
+                    <h3>Utveckling &amp; Integration</h3>
+                    <div class="tech-list">
+                        <span>C#</span>
+                        <span>.NET</span>
+                        <span>REST-API:er</span>
+                        <span>SQL</span>
+                        <span>API-integration</span>
+                        <span>Git / GitHub</span>
+                        <span>CI/CD</span>
+                        <span>Bicep</span>
+                        <span>Agile / Scrum</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-block">
+            <h2>Projekt</h2>
+            <div class="project-grid">
+                <article class="project-card project-card-featured">
+                    <div>
+                        <h3>Coop Azure datapipeline</h3>
+                    </div>
+                    <dl>
+                        <dt>Problem</dt>
+                        <dd>Betalnings- och transaktionsdata behövde ett stabilt och automatiserat flöde för att möjliggöra analys, kvalitetskontroller och verksamhetsrapportering utan 
+                            manuella steg.</dd>
+
+                        <dt>Lösning</dt>
+                        <dd>En Azure baserad datapipeline byggdes för att automatiskt hämta transaktionsfiler, lagra data i Blob Storage och bearbeta 
+                            den vidare till Azure SQL och Power BI. Lösningen skapade ett mer tillförlitligt och automatiserat flöde för analys och rapportering.</dd>
+
+                        <dt>Tekniker</dt>
+                        <dd>Azure Data Factory, Azure SQL database, Storage Account, Power BI och SQL.</dd>
+
+                        <dt>Min roll</dt>
+                        <dd>Satt upp Azure resurser och utvecklade den automatiserade datapipelinen i Azure Data Factory, inklusive integration mot FTP-broker, 
+                            lagring i Storage, databearbetning i Azure SQL samt underlag för visualisering i Power BI. Arbetade även med datamodellering, 
+                            kvalitetskontroller och automatisering för att möjliggöra ett stabilt och automatiserat flöde utan manuella steg. Arbetade även med felsökning, datavalidering och samarbete mellan verksamhet och teknik för att säkerställa stabila flöden.</dd>
+                    </dl>
+                </article>
+
+                <article class="project-card">
+                    <h3>AI-kunskapscopilot / AI-agent</h3>
+                    <dl>
+                        <dt>Problem</dt>
+                        <dd>Anställda i Coops interna IDA-plattform behövde snabbare stöd för att hitta instruktioner och hantera accessrelaterade 
+                            ärenden, exempelvis behörigheter, systemåtkomst och administrativa processer.</dd>
+
+                        <dt>Lösning</dt>
+                        <dd>Utvecklade en AI-driven kunskapscopilot som kombinerar RAG (Retrieval-Augmented Generation) med interna API:er för att 
+                            ge kontextbaserade svar och stöd i ärendeflöden. Lösningen integrerades med Azure AI Search, Azure OpenAI och Azure 
+                            Functions för att möjliggöra både kunskapssökning och användarspecifik accessinformation.</dd>
+
+                        <dt>Tekniker</dt>
+                        <dd>Azure AI Search, Azure OpenAI, Azure AI Foundry, Azure Functions, RAG, OpenAPI, REST API:er, Storage Account, Vector Search.</dd>
+
+                        <dt>Min roll</dt>
+                        <dd>Designade och konfigurerade en PoC för en AI-agent i Azure AI Foundry, inklusive kunskapsbas med RAG, indexering i 
+                            Azure AI Search och verktygsintegration via OpenAPI. Utvecklade och deployade Azure Functions för användarspecifika 
+                            accessfrågor samt definierade agentlogik och instruktioner för säkra och relevanta svar. Lösningen verifierades 
+                            end-to-end från användarfråga till API-anrop och svar.</dd>
+                    </dl>
+                </article>
+
+            
+
+                <!-- <article class="project-card">
+                    <h3>Azure-infrastruktur med Bicep</h3>
+                    <dl>
+                        <dt>Problem</dt>
+                        <dd>Molnresurser behövde kunna sättas upp mer konsekvent med tydligare konfiguration och säkrare arbetssätt.</dd>
+
+                        <dt>Lösning</dt>
+                        <dd>Använde infrastruktur som kod med Bicep för att definiera Azure-resurser och stödja en mer repeterbar uppsättning.</dd>
+
+                        <dt>Tekniker</dt>
+                        <dd>Bicep, Azure, GitHub, CI/CD, Azure Functions, Azure Storage.</dd>
+
+                        <dt>Min roll</dt>
+                        <dd>Skapade och justerade Bicep-baserade resursdefinitioner, arbetade med Git-baserade arbetsflöden och stödde struktur för uppsättning.</dd>
+                    </dl>
+                </article> -->
+            </div>
+        </section>
+
+        <section class="section-block contact-block">
+            
+            <div class="contact-links">
+                <a href="mailto:inesazouz@gmail.com">
+                    <img src="images/email.svg" alt="" class="contact-icon">
+                    <span>inesazouz@gmail.com</span>
+                </a>
+                <a href="https://github.com/InesCloudAz" target="_blank" rel="noopener">
+                    <img src="images/github.jpg" alt="" class="contact-icon">
+                    <span>GitHub</span>
+                </a>
+                <a href="https://www.linkedin.com/in/ines-azouz-69447110b/" target="_blank" rel="noopener">
+                    <img src="images/linkedin-logo.jpg" alt="" class="contact-icon">
+                    <span>LinkedIn</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Ines Azouz</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
