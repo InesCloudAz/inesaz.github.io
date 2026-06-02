@@ -1,0 +1,84 @@
+trigger:
+  branches:
+    include:
+      - main
+      - master
+
+pool:
+  vmImage: windows-latest
+
+variables:
+  buildConfiguration: Release
+  azureSubscription: 'AzureTodoServiceConnection'
+  webAppName: 'azure-todo-examensprojekt'
+  solution: 'AzureTodoExamensprojekt.sln'
+  webProject: 'Todo.Web/Todo.Web.csproj'
+
+stages:
+  - stage: Build
+    displayName: Restore, build and test
+    jobs:
+      - job: BuildAndTest
+        displayName: Build solution
+        steps:
+          - task: UseDotNet@2
+            displayName: Use .NET 8 SDK
+            inputs:
+              packageType: sdk
+              version: 8.x
+
+          - task: DotNetCoreCLI@2
+            displayName: Restore
+            inputs:
+              command: restore
+              projects: '$(solution)'
+
+          - task: DotNetCoreCLI@2
+            displayName: Build
+            inputs:
+              command: build
+              projects: '$(solution)'
+              arguments: '--configuration $(buildConfiguration) --no-restore'
+
+          - task: DotNetCoreCLI@2
+            displayName: Run tests
+            inputs:
+              command: test
+              projects: 'Todo.Tests/Todo.Tests.csproj'
+              arguments: '--configuration $(buildConfiguration) --no-build --collect "XPlat Code Coverage"'
+
+          - task: DotNetCoreCLI@2
+            displayName: Publish MVC web app
+            inputs:
+              command: publish
+              publishWebProjects: false
+              projects: '$(webProject)'
+              arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/web'
+              zipAfterPublish: true
+
+          - publish: '$(Build.ArtifactStagingDirectory)/web'
+            displayName: Publish artifact
+            artifact: drop
+
+  - stage: Deploy
+    displayName: Deploy to Azure App Service
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: DeployWeb
+        displayName: Deploy web package
+        environment: production
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: current
+                  artifact: drop
+
+                - task: AzureWebApp@1
+                  displayName: Deploy to App Service
+                  inputs:
+                    azureSubscription: '$(azureSubscription)'
+                    appType: webApp
+                    appName: '$(webAppName)'
+                    package: '$(Pipeline.Workspace)/drop/**/*.zip'
