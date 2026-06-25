@@ -56,8 +56,11 @@ header h2
 
 .hero h1
 {
-    font-size: 2.15rem;
+    font-size: 1.88rem;
+    max-width: 900px;
     margin: 4px 0 4px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .hero-name
@@ -137,6 +140,7 @@ header h2
 
 .navbar-brand
 {
+    color: #ffffff;
     font-size: 0.98rem;
     font-weight: 600;
     padding-bottom: 0.35rem;
@@ -469,7 +473,7 @@ main a:hover span {
     header h1,
     .hero h1
     {
-        font-size: 1.85rem;
+        font-size: 1.55rem;
     }
 
     header h2
@@ -504,6 +508,19 @@ main a:hover span {
     {
         flex: 1 1 120px;
         max-width: 180px;
+    }
+}
+
+@media print
+{
+    footer
+    {
+        display: none;
+    }
+
+    main.container.my-5
+    {
+        margin-bottom: 0 !important;
     }
 }
 
